@@ -25,8 +25,11 @@ install:
 	install -D -m 0644 -t $(DESTDIR)/lib/systemd/system/ contrib/nextcloud-exporter.service
 
 image:
+	docker buildx build -t "xperimental/nextcloud-exporter:$(VERSION)" .
+
+push-all:
 	docker buildx create --use --driver docker-container --name buildx_nextcloud_exporter
-	docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v8 -t "xperimental/nextcloud-exporter:$(VERSION)" .
+	docker buildx build --push --platform linux/amd64,linux/arm64,linux/arm/v8 -t "xperimental/nextcloud-exporter:$(VERSION)" .
 	docker buildx rm buildx_nextcloud_exporter
 
 clean:
